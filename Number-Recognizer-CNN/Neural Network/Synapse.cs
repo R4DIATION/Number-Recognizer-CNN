@@ -31,8 +31,15 @@ namespace Number_Recognizer_CNN.Neural_Network
 			get { return _weight; }
 			set { _weight = value; }
 		}
+		private double _gradient_Weight;
 
-        public Synapse(Neuron input, Neuron output)
+		public double GradientWeight
+		{
+			get { return _gradient_Weight; }
+			set { _gradient_Weight = value; }
+		}
+
+		public Synapse(Neuron input, Neuron output)
         {
             this._inputNeuron = input;
 			this._outputNeuron = output;

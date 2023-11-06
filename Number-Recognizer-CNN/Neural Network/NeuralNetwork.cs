@@ -10,10 +10,13 @@ namespace Number_Recognizer_CNN.Neural_Network
    
     public class NeuralNetwork
     {
+        private const double LearningRate = 0.001;
         private double _cost;
         private int HiddenNeuronCount;
         private int _expectedValue;
+        private double _value;
         private Layer[] layers;
+        private int count;
         public NeuralNetwork(int number_of_hidden_neurons)
         {
             this.HiddenNeuronCount = number_of_hidden_neurons;
@@ -36,6 +39,8 @@ namespace Number_Recognizer_CNN.Neural_Network
             if (_cost != 0)
             {
                 Backpropagate();
+                count++;
+
             }
         }
         private void ConnectLayers()
@@ -85,15 +90,54 @@ namespace Number_Recognizer_CNN.Neural_Network
                     selectedNumber = i;
                 }
             }
+            _value = selectedNumber;
             _cost = Cost(selectedNumber, this._expectedValue);
 
-            Console.WriteLine($"Expected number: {_expectedValue}");
-            Console.WriteLine($"Actual number: {selectedNumber}");
-            Console.WriteLine($"C O S T: {_cost}");
+            
         }
         private void Backpropagate()
         {
+            // Gradient of cost with respect to output = first
+            // Gradient of output with respect to prev weights = second
+            // Gradient of prev weights with respect to prev activation = third
+            // Gradient of prev activation with respect to prev weighted sum = fourth
+            // Gradient of prev weighted sum with respect to prev-prev weights = fifth
 
+            for (int i = 0; i < layers.Last().Neurons.Length; i++)
+            {
+                layers.Last().Neurons[i].CalculateGradient(this._expectedValue);
+            }
+
+            for (int i = 0; i < layers.Last().Neurons.Length; i++) 
+            {                                                                           
+                for (int j = 0; j < layers.Last().Neurons[i].Synapses.Length; j++)
+                {
+                    double weight = layers.Last().Neurons[i].Synapses[j].Weight;
+                    layers.Last().Neurons[i].Synapses[j].Weight = weight - LearningRate * (layers.Last().Neurons[i].Gradient[j]);
+                }
+            }
+
+
+            for (int i = 0; i < layers[1].Neurons.Length; i++)
+            {
+                layers[1].Neurons[i].CalculateGradient();
+            }
+
+
+            for (int i = 0; i < layers[1].Neurons.Length; i++)
+            {
+                for (int j = 0; j < layers[1].Neurons[i].Synapses.Length; j++)
+                {
+                    double weight = layers[1].Neurons[i].Synapses[j].Weight;
+                    layers[1].Neurons[i].Synapses[j].Weight = weight - LearningRate * (layers[1].Neurons[i].Gradient[j]);
+
+                }
+            }
+
+        }
+        public double Average()
+        {
+            return (double)(this.count / 60000);
         }
     }
     

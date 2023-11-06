@@ -90,9 +90,9 @@ namespace Number_Recognizer_CNN.Convolution
                 {
                     Color pixel = img.GetPixel(j,i);
                     picture[i,j] = Math.Round(0.3 * pixel.R + 0.59 * pixel.G + 0.11 * pixel.B / 255) ;
-                    Console.Write(" "+picture[i, j]);
+                    //Console.Write(" "+picture[i, j]);
                 }
-                Console.WriteLine();
+              //Console.WriteLine();
             }
             img.Dispose();
 

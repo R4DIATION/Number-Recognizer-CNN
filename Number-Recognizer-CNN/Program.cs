@@ -7,14 +7,17 @@ namespace Number_Recognizer_CNN
     {
         static void Main(string[] args)
         {
-            int number_of_samples = 1;
-            NeuralNetwork network = new NeuralNetwork(16);
+            NeuralNetwork network = new NeuralNetwork(128);
             List<string> list = File.ReadAllLines("numbers.csv").Skip(1).Select(x => x).ToList();
+            int number_of_samples = list.Count;
             for (int i = 0; i < number_of_samples; i++)
             {
                 string[] helper = list[i].Split(',');
                 convolution conv = new convolution("numbers/"+helper.Last(), int.Parse(helper[helper.Length - 2]), network);
+                
             }
+            Console.WriteLine(network.Average());
+            
         }
     }
 }
